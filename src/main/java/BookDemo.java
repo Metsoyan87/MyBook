@@ -1,19 +1,21 @@
+import commands.Commands;
 import enums.Gender;
 import exception.AuthorNotFoundException;
 import model.Author;
 import model.Book;
 import model.Role;
 import model.User;
+import org.apache.poi.ss.usermodel.Workbook;
 import storage.AuthorStorage;
 import storage.BookStorage;
 import storage.UserStorage;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Scanner;
-
 import static util.DateUtil.stringToDate;
 
 
-public class BookDemo implements main.java.commands.Commands {
+public class BookDemo implements commands.Commands {
 
     private static Scanner scanner = new Scanner(System.in);
     private static BookStorage bookStorage = new BookStorage();
@@ -25,11 +27,11 @@ public class BookDemo implements main.java.commands.Commands {
     public static void main(String[] args) {
 
 
-        Author Sevak = new Author("Paruyr", "Sevak", "sevak@mail.ru", Gender.MALE,stringToDate("03/05/2021"));
+        Author Sevak = new Author("Paruyr", "Sevak", "sevak@mail.ru", Gender.MALE, stringToDate("03/05/2021"));
         authorStorage.add(Sevak);
-        Author Viliam = new Author("Viliam", "Saroyan", "saroyan@mail.ru",Gender.MALE,stringToDate("01/09/2021"));
+        Author Viliam = new Author("Viliam", "Saroyan", "saroyan@mail.ru", Gender.MALE, stringToDate("01/09/2021"));
         authorStorage.add(Viliam);
-        Author Silva = new Author("Silva","Hakobyan","Hakobyan@mail.ru",Gender.FEMALE,stringToDate("03/05/2021"));
+        Author Silva = new Author("Silva", "Hakobyan", "Hakobyan@mail.ru", Gender.FEMALE, stringToDate("03/05/2021"));
         authorStorage.add(Silva);
 
         //Admin
@@ -41,13 +43,13 @@ public class BookDemo implements main.java.commands.Commands {
         userStorage.add(user1);
 
 
-        bookStorage.add(new Book("Hayastan", Silva, 12.25, 3, "vep", admin,new Date()));
-        bookStorage.add(new Book("Sasunci Davit", Viliam, 52.36, 1, "Patmakan", user,new Date()));
+        bookStorage.add(new Book("Hayastan", Silva, 12.25, 3, "vep", admin, new Date()));
+        bookStorage.add(new Book("Sasunci Davit", Viliam, 52.36, 1, "Patmakan", user, new Date()));
 
 
         boolean run = true;
         while (run) {
-            main.java.commands.Commands.printLoginCommands();
+            commands.Commands.printLoginCommands();
             int command;
             try {
                 command = Integer.parseInt(scanner.nextLine());
@@ -115,12 +117,11 @@ public class BookDemo implements main.java.commands.Commands {
 
     }
 
-
     private static void adminLogin() {
         System.out.println("Welcome, " + currentUser.getName());
         boolean run = true;
         while (run) {
-            main.java.commands.Commands.printAdminCommand();
+            commands.Commands.printAdminCommand();
             int command;
             try {
                 command = Integer.parseInt(scanner.nextLine());
@@ -159,6 +160,9 @@ public class BookDemo implements main.java.commands.Commands {
                 case CHANGE_BOOK_AUTHOR:
                     changeBookAuthor();
                     break;
+                case DOWNLOAD_ALL_BOOKS:
+                    printAllBooks();
+                    break;
                 default:
                     System.out.println("Invalid command, please try again");
             }
@@ -169,7 +173,7 @@ public class BookDemo implements main.java.commands.Commands {
         System.out.println("Welcome, " + currentUser.getName());
         boolean run = true;
         while (run) {
-            main.java.commands.Commands.printUserCommands();
+            Commands.printUserCommands();
             int command;
             try {
                 command = Integer.parseInt(scanner.nextLine());
@@ -199,6 +203,9 @@ public class BookDemo implements main.java.commands.Commands {
                 case SEARCH_AUTHOR_BY_INDEX:
                     authorByIndex();
                     break;
+                case DOWNLOAD_ALL_BOOKS:
+                    printAllBooks();
+                    break;
 
                 default:
                     System.out.println("Invalid command, please try again");
@@ -223,15 +230,13 @@ public class BookDemo implements main.java.commands.Commands {
             Gender genderStr = Gender.valueOf(scanner.nextLine());
             System.out.println("Please input lesson start date (dd/MM/yyyy)");
             String strDate = scanner.nextLine();
-            Author author = new Author(name, surname, email, genderStr,stringToDate(strDate));
+            Author author = new Author(name, surname, email, genderStr, stringToDate(strDate));
             authorStorage.add(author);
             System.out.println("author created!");
         } catch (IllegalArgumentException e) {
             System.out.println("Please input MALE or Female");
             addAuthor();
         }
-
-
     }
 
     private static void changeBookAuthor() {
@@ -280,7 +285,7 @@ public class BookDemo implements main.java.commands.Commands {
 
                 double price = Double.parseDouble(priceStr);
                 int count = Integer.parseInt(countStr);
-                Book book = new Book(title, author, price, count, genre, currentUser,stringToDate(strDate));
+                Book book = new Book(title, author, price, count, genre, currentUser, stringToDate(strDate));
                 bookStorage.add(book);
                 System.out.println("Thank you, book added");
             } catch (AuthorNotFoundException e) {
@@ -320,4 +325,15 @@ public class BookDemo implements main.java.commands.Commands {
             System.out.println(e.getMessage());
         }
     }
+
+    private static void printAllBooks() {
+        System.out.println("Please input file directory");
+        String fileDir = scanner.nextLine();
+        try {
+            bookStorage.writeBooksToExcel(fileDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

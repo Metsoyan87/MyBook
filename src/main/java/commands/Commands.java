@@ -1,4 +1,4 @@
-package main.java.commands;
+package commands;
 
 public interface Commands {
     int LOGOUT = 0;
@@ -11,6 +11,8 @@ public interface Commands {
     int PRINT_ALL_AUTHORS = 7;
     int SEARCH_AUTHOR_BY_INDEX = 8;
     int CHANGE_BOOK_AUTHOR = 9;
+    int DOWNLOAD_ALL_BOOKS = 10;
+
 
 
     int EXIT = 0;
@@ -29,6 +31,7 @@ public interface Commands {
         System.out.println("please input " + PRINT_ALL_AUTHORS + " for print all authors");
         System.out.println("please input " + SEARCH_AUTHOR_BY_INDEX + " for search by author index");
         System.out.println("please input " + CHANGE_BOOK_AUTHOR + " for change book's lesson");
+        System.out.println("please input " + DOWNLOAD_ALL_BOOKS + " for print all books");
 
     }
     static void printLoginCommands() {
@@ -46,6 +49,7 @@ public interface Commands {
         System.out.println("please input " + PRINT_BOOKS_BY_PRICE_RANGE + " for print by price range");
         System.out.println("please input " + PRINT_ALL_AUTHORS + " for print all authors");
         System.out.println("please input " + SEARCH_AUTHOR_BY_INDEX + " for search by author index");
+        System.out.println("please input " + DOWNLOAD_ALL_BOOKS + " for for print all books");
     }
 
 }
