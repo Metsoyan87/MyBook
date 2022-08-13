@@ -161,7 +161,7 @@ public class BookDemo implements commands.Commands {
                     changeBookAuthor();
                     break;
                 case DOWNLOAD_ALL_BOOKS:
-                    printAllBooks();
+                    downloadAllBooks();
                     break;
                 default:
                     System.out.println("Invalid command, please try again");
@@ -204,7 +204,7 @@ public class BookDemo implements commands.Commands {
                     authorByIndex();
                     break;
                 case DOWNLOAD_ALL_BOOKS:
-                    printAllBooks();
+                    downloadAllBooks();
                     break;
 
                 default:
@@ -326,7 +326,7 @@ public class BookDemo implements commands.Commands {
         }
     }
 
-    private static void printAllBooks() {
+    private static void downloadAllBooks() {
         System.out.println("Please input file directory");
         String fileDir = scanner.nextLine();
         try {
